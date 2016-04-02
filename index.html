@@ -11,10 +11,15 @@
     
 </head>
 <body>
+    
+    <div class="neighborhood">
+        <input data-bind="value: neighborhood" class="">
+    </div>
+    <div class="search-bar">
+        <input data-bind="value: keyword" class="search-area" placeholder="search for popular places">
+        <button class="search-button">Search</button>
+    </div>
     <div id="map"></div>
-    <div id="googleMap-API-error"></div>
-
-
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
