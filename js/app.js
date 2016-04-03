@@ -6,15 +6,20 @@ function mapViewModel() {
     var self = this,
         map,
         service,
-        mapOptions;
+        mapOptions,
+        lat,
+        lng;
         
     var defaultNeighborhood = "New York";
     self.neighborhood = ko.observable(defaultNeighborhood); 
 
     // Load Foursquare data
     function LoadFourSquare() {
-
-
+        var url_prefix = 'https://api.foursquare.com/v2/venues/search?client_id=';
+        var client_id = '1I25VINMXH4AXMWCEUDLLBDD0LIWFSBVNXRCM3USQQOBCBSW';
+        var client_secret = '&client_secret=MDMKL344UHNL4NDWGNN5HVQBZEDPWMIUOOGCODYQV5PFTE2R';
+        var version = '&v=20130815&venuePhotos=1';
+        var location = '&ll' + lat + ',' + lng;
     };
     // initializing the Google Map
     function initializeMap() {
@@ -65,10 +70,11 @@ function mapViewModel() {
         }
     };
 
+    // Get neighborhood's real lat and lng, set up map center 
     function mapCenter(neighborhoodPlace) {
 
-        var lat = neighborhoodPlace.geometry.location.lat();
-        var lng = neighborhoodPlace.geometry.location.lng();
+        lat = neighborhoodPlace.geometry.location.lat();
+        lng = neighborhoodPlace.geometry.location.lng();
         var neighborhoodShowOnMap = new google.maps.LatLng(lat, lng);
 
         map.setCenter(neighborhoodShowOnMap);
