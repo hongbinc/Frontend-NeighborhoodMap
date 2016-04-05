@@ -9,10 +9,10 @@ function mapViewModel() {
         mapOptions,
         lat,
         lng;
-        
+    var defaultKeyword = "";
     var defaultNeighborhood = "New York";
     self.neighborhood = ko.observable(defaultNeighborhood); 
-
+    self.keyword = ko.observable('');
     // Load Foursquare data
     function LoadFourSquare() {
         var url_prefix = 'https://api.foursquare.com/v2/venues/search?client_id=';
@@ -50,9 +50,10 @@ function mapViewModel() {
         if(self.neighborhood() != ''){
            getNeighborhood(self.neighborhood());
         }
+        console.log(self.keyword());
     };
     self.neighborhood.subscribe(self.computedNeighborhood);
-
+    self.keyword.subscribe(self.computedNeighborhood);
     // request neighborhood location data from PlaceService
     function getNeighborhood(neighborhood) {
     
