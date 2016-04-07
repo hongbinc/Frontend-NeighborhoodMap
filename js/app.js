@@ -20,6 +20,11 @@ function mapViewModel() {
         var client_secret = '&client_secret=MDMKL344UHNL4NDWGNN5HVQBZEDPWMIUOOGCODYQV5PFTE2R';
         var version = '&v=20130815&venuePhotos=1';
         var location = '&ll' + lat + ',' + lng;
+        var keyword = self.keyword();
+        var search = '&query' + keyword;
+        var FourSquareURL = url_prefix + client_id + client_secret + version + location + search;
+
+
     };
     // initializing the Google Map
     function initializeMap() {
