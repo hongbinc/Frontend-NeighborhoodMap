@@ -2,6 +2,17 @@
  * Main JS file for NeighborhoodMap Application
  * Model and View Model
  */
+
+// FourSquare data model
+var venue = function(data) {
+    this.placename = data.venue.name;
+    this.id = data.venue.id;
+    this.lat = data.venue.location.lat;
+    this.lng = data.venue.location.lng;
+
+    
+};
+
 function mapViewModel() {
     var self = this,
         map,
@@ -15,10 +26,16 @@ function mapViewModel() {
     self.keyword = ko.observable('');
     self.dataList = ko.observableArray([]);
 
-    // FourSquare data model
+    // create place marker
     function displayMarker(data) {
+       
+        var position = new google.maps.LatLng(data.lat, data.lng);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: position,
+            title: data.placename
 
-
+        });
     };
 
     // Load Foursquare data
@@ -35,21 +52,25 @@ function mapViewModel() {
         //console.log(keyword);
         $.getJSON(FourSquareURL, function (data) {
            
-            // save FourSquare data in dataList
-            self.dataList(data.response.groups[0].items);
-            for (var venue in self.dataList()) {
-                displayMarker(self.dataList()[venue].venue);
-            }
+            var FourSquareData = data.response.groups[0].items;
 
+            FourSquareData.forEach(function (data) {
+
+                self.dataList.push(new venue(data));
+            });
+
+            self.dataList().forEach(function (venueItem) {
+                displayMarker(venueItem);
+            });
             // set bounds to FourSqure suggested bounds for each items
-            var bounds = data.response.suggestedBounds;
+       /*     var bounds = data.response.suggestedBounds;
             if (bounds != undefined) {
                 mapBounds = new google.maps.LatLngBounds(
                   new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
                   new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
                 map.fitBounds(mapBounds);
             }
-
+        */
         }).error(function (e) {
 
             $APIError.text('Error: Data could not be load');
