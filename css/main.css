@@ -11,3 +11,7 @@ html, body {
 #GoogleMap {
     height: 100%;
 }
+.showbox {
+    position:absolute;
+    z-index:100;
+}

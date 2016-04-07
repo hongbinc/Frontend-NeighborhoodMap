@@ -13,10 +13,17 @@ function mapViewModel() {
     var defaultNeighborhood = "New York";
     self.neighborhood = ko.observable(defaultNeighborhood); 
     self.keyword = ko.observable('');
+    self.dataList = ko.observableArray([]);
 
+    // FourSquare data model
+    function displayMarker(data) {
+
+
+    };
 
     // Load Foursquare data
     function LoadFourSquare() {
+        var $APIError = $('#APIError');
         var url_prefix = 'https://api.foursquare.com/v2/venues/explore?client_id=';
         var client_id = '1I25VINMXH4AXMWCEUDLLBDD0LIWFSBVNXRCM3USQQOBCBSW';
         var client_secret = '&client_secret=MDMKL344UHNL4NDWGNN5HVQBZEDPWMIUOOGCODYQV5PFTE2R';
@@ -25,10 +32,27 @@ function mapViewModel() {
         var keyword = self.keyword();
         var search = '&query=' + keyword;
         var FourSquareURL = url_prefix + client_id + client_secret + version + location + search;
-        console.log(keyword);
+        //console.log(keyword);
         $.getJSON(FourSquareURL, function (data) {
+           
+            // save FourSquare data in dataList
+            self.dataList(data.response.groups[0].items);
+            for (var venue in self.dataList()) {
+                displayMarker(self.dataList()[venue].venue);
+            }
 
+            // set bounds to FourSqure suggested bounds for each items
+            var bounds = data.response.suggestedBounds;
+            if (bounds != undefined) {
+                mapBounds = new google.maps.LatLngBounds(
+                  new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
+                  new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
+                map.fitBounds(mapBounds);
+            }
 
+        }).error(function (e) {
+
+            $APIError.text('Error: Data could not be load');
         });
     };
 
@@ -59,7 +83,8 @@ function mapViewModel() {
     self.computedNeighborhood = function () {
 
         if(self.neighborhood() != ''){
-           getNeighborhood(self.neighborhood());
+            getNeighborhood(self.neighborhood());
+           // self.dataList([]);
         }
        // console.log(self.keyword());
     };

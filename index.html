@@ -11,13 +11,19 @@
     
 </head>
 <body>
-    
-    <div class="neighborhood">
-        <input data-bind="value: neighborhood" class="">
-    </div>
-    <div class="search-bar">
-        <input data-bind="value: keyword" class="search-area" placeholder="search for popular places">
-        <button class="search-button">Search</button>
+    <div class="showbox">
+        <div class="neighborhood">
+            <input data-bind="value: neighborhood" class="">
+        </div>
+        <div class="search-bar">
+            <input data-bind="value: keyword" class="search-area" placeholder="search for popular places">
+            <button class="search-button">Search</button>
+        </div>
+        <div class="PlaceDisplay">
+            <div >
+                <h3 id="APIError"></h3>
+            </div>
+        </div>
     </div>
     <div id="map"></div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
