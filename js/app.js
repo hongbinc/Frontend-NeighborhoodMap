@@ -9,23 +9,29 @@ function mapViewModel() {
         mapOptions,
         lat,
         lng;
-    var defaultKeyword = "";
+    var defaultKeyword = "best nearby";
     var defaultNeighborhood = "New York";
     self.neighborhood = ko.observable(defaultNeighborhood); 
     self.keyword = ko.observable('');
+
+
     // Load Foursquare data
     function LoadFourSquare() {
-        var url_prefix = 'https://api.foursquare.com/v2/venues/search?client_id=';
+        var url_prefix = 'https://api.foursquare.com/v2/venues/explore?client_id=';
         var client_id = '1I25VINMXH4AXMWCEUDLLBDD0LIWFSBVNXRCM3USQQOBCBSW';
         var client_secret = '&client_secret=MDMKL344UHNL4NDWGNN5HVQBZEDPWMIUOOGCODYQV5PFTE2R';
         var version = '&v=20130815&venuePhotos=1';
-        var location = '&ll' + lat + ',' + lng;
+        var location = '&ll=' + lat + ',' + lng;
         var keyword = self.keyword();
-        var search = '&query' + keyword;
+        var search = '&query=' + keyword;
         var FourSquareURL = url_prefix + client_id + client_secret + version + location + search;
+        console.log(keyword);
+        $.getJSON(FourSquareURL, function (data) {
 
 
+        });
     };
+
     // initializing the Google Map
     function initializeMap() {
 
@@ -55,7 +61,7 @@ function mapViewModel() {
         if(self.neighborhood() != ''){
            getNeighborhood(self.neighborhood());
         }
-        console.log(self.keyword());
+       // console.log(self.keyword());
     };
     self.neighborhood.subscribe(self.computedNeighborhood);
     self.keyword.subscribe(self.computedNeighborhood);
@@ -84,6 +90,9 @@ function mapViewModel() {
         var neighborhoodShowOnMap = new google.maps.LatLng(lat, lng);
 
         map.setCenter(neighborhoodShowOnMap);
+
+        // Load FourSquare data
+        LoadFourSquare();
     };
 
     function initNeighborhood(neighborhood) {
