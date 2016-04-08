@@ -19,7 +19,9 @@ function mapViewModel() {
         service,
         mapOptions,
         lat,
-        lng;
+        lng,
+        infowindow;
+
     var defaultKeyword = "best nearby";
     var defaultNeighborhood = "New York";
     var placeMarkers = [];
@@ -67,9 +69,15 @@ function mapViewModel() {
         });
     };
 
+    function getMarkerContent(data) {
+
+        var contentString = '<h1>faf</h1>';
+
+        return contentString;
+    };
     // create place marker
     function displayMarker(data) {
-       
+        
         var place = new google.maps.LatLng(data.lat, data.lng);
 
         // create a marker for selected place
@@ -79,9 +87,17 @@ function mapViewModel() {
             title: data.placename
 
         });
+        // push marker to the array
         placeMarkers.push(marker);
+
+        var markerContent = getMarkerContent(data);
+        marker.addListener('click', function () {
+            infowindow.open(map, marker);
+            infowindow.setContent(markerContent);
+        });
     };
     
+    // Removes the markers from the map and array
     function removeMarker() {
        // self.currentMarker.setMap(null);
 
@@ -111,7 +127,7 @@ function mapViewModel() {
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         //infowindow = new google.maps.InfoWindow();
         $('#map').height($(window).height());
-
+        infowindow = new google.maps.InfoWindow();
     };
     window.addEventListener('resize', function (e) {
   
