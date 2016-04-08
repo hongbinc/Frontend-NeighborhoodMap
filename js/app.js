@@ -9,7 +9,7 @@ var venue = function(data) {
     this.id = data.venue.id;
     this.lat = data.venue.location.lat;
     this.lng = data.venue.location.lng;
-
+    //this.marker = {};
     
 };
 
@@ -22,22 +22,12 @@ function mapViewModel() {
         lng;
     var defaultKeyword = "best nearby";
     var defaultNeighborhood = "New York";
+    var placeMarkers = [];
     self.neighborhood = ko.observable(defaultNeighborhood); 
     self.keyword = ko.observable('');
     self.dataList = ko.observableArray([]);
-
-    // create place marker
-    function displayMarker(data) {
-       
-        var position = new google.maps.LatLng(data.lat, data.lng);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: position,
-            title: data.placename
-
-        });
-    };
-
+    self.currentMarker = ko.observable('');
+    
     // Load Foursquare data
     function LoadFourSquare() {
         var $APIError = $('#APIError');
@@ -77,6 +67,33 @@ function mapViewModel() {
         });
     };
 
+    // create place marker
+    function displayMarker(data) {
+       
+        var place = new google.maps.LatLng(data.lat, data.lng);
+
+        // create a marker for selected place
+        var marker = new google.maps.Marker({
+            map: map,
+            position: place,
+            title: data.placename
+
+        });
+        placeMarkers.push(marker);
+    };
+    
+    function removeMarker() {
+       // self.currentMarker.setMap(null);
+
+        placeMarkers.forEach(function (place) {
+            place.setMap(null);
+
+        });
+        placeMarkers = [];
+    }
+
+
+
     // initializing the Google Map
     function initializeMap() {
 
@@ -103,8 +120,11 @@ function mapViewModel() {
 
     self.computedNeighborhood = function () {
 
-        if(self.neighborhood() != ''){
+        if (self.neighborhood() != '') {
+            removeMarker();
+            self.dataList([]);
             getNeighborhood(self.neighborhood());
+           // removeMarker();
            // self.dataList([]);
         }
        // console.log(self.keyword());
@@ -117,6 +137,7 @@ function mapViewModel() {
         var request = {
             query: neighborhood
         };
+
         service = new google.maps.places.PlacesService(map);
         service.textSearch(request, neighborhoodCallback);
     };
