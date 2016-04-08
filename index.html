@@ -11,6 +11,7 @@
     
 </head>
 <body>
+    
     <div class="showbox">
         <div class="neighborhood">
             <input data-bind="value: neighborhood" class="">
@@ -24,6 +25,22 @@
                 <h3 id="APIError"></h3>
             </div>
         </div>
+    </div>
+
+    <div id="infolistBox">
+        <h2>Popular Places</h2>
+        <div>
+        <ul data-bind="foreach: dataList ">
+            <li data-bind="click: $root.clickMarker">
+                <hr>
+                <p><span class="v-name" data-bind="text: placename"></span></p>
+                <p class="v-category"><span data-bind="text: category"></span></p>
+                <p class="v-address"><span data-bind="text: formattedAddress"></span></p>
+                <p class="v-contact"><span data-bind="text: formattedPhone"></span></p>
+                <p class="v-tips"><span data-bind="text: tips"></span></p>
+            </li>
+        </ul>
+        </div> 
     </div>
     <div id="map"></div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

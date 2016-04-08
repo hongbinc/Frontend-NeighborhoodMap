@@ -4,14 +4,70 @@
  */
 
 // FourSquare data model
-var venue = function(data) {
+var venue = function (data) {
     this.placename = data.venue.name;
     this.id = data.venue.id;
     this.lat = data.venue.location.lat;
     this.lng = data.venue.location.lng;
-    //this.marker = {};
-    
+    this.foursquareURL = "https://foursquare.com/v/" + this.id;
+    this.category = data.venue.categories[0].name;
+    this.formattedPhone = this.getFormattedPhone(data);
+    this.formattedAddress = data.venue.location.formattedAddress;
+    this.tips = this.getTips(data);
+
+    this.url = this.getUrl(data);
+
+    this.rating = this.getRating(data);
+
+    this.featuredPhoto = this.getFeaturedPhoto(data);
+
 };
+
+// venue data error handlings and formmatting
+venue.prototype = {
+
+    getPhotoAlbumnURL: function (data, foursquareID) {
+        return this.basePhotoAlbumnURL + this.id + '/photos?' + foursquareID + '&v=20130815';
+    },
+
+    getFormattedPhone: function (data) {
+        if (!data.venue.contact.formattedPhone)
+            return 'Contact Not Available';
+        else
+            return data.venue.contact.formattedPhone;
+    },
+
+    getTips: function (data) {
+        if (!data.tips)
+            return 'Tips Not Available';
+        else
+            return data.tips[0].text;
+    },
+
+    getUrl: function (data) {
+        if (!data.venue.url)
+            return 'Website Not Available';
+        else
+            return data.venue.url;
+    },
+
+    getRating: function (data) {
+        if (!data.venue.rating)
+            return '0.0';
+        else
+            return data.venue.rating;
+    },
+
+    getFeaturedPhoto: function (data) {
+        if (!data.venue.featuredPhotos)
+            return this.photoPlaceHolder;
+        else {
+            this.photoSuffix = data.venue.featuredPhotos.items[0].suffix;
+            return this.photoPrefix + 'width100' + this.photoSuffix;
+        }
+    }
+}
+
 
 function mapViewModel() {
     var self = this,
@@ -29,8 +85,11 @@ function mapViewModel() {
     self.neighborhood = ko.observable(defaultNeighborhood); 
     self.keyword = ko.observable('');
     self.dataList = ko.observableArray([]);
-    self.currentMarker = ko.observable('');
-    
+   // self.currentMarker = ko.observable('');
+  //  self.selectedVenue = ko.observable(''); // selected venue info
+    //self.selectedMarker = ko.observable(''); // selected marker info
+
+    //self.placeList = ko.observableArray(self.dataList());
     // Load Foursquare data
     function LoadFourSquare() {
         var $APIError = $('#APIError');
@@ -71,9 +130,31 @@ function mapViewModel() {
         });
     };
 
+
     function getMarkerContent(data) {
 
-        var contentString = '<h1>faf</h1>';
+        var contentString = '<div class="venue-infowindow">'
+							+ '<div class="venue-name">'
+							+ '<a href ="' + data.foursquareURL + '">'
+							+ data.placename
+							+ '</a>'
+							+ '<span class="venue-rating badge">'
+							+ data.rating
+							+ '</span>'
+							+ '</div>'
+							+ '<div class="venue-category"><span class=""></span>'
+							+ data.category
+							+ '</div>'
+							+ '<div class="venue-address"><span class=""></span>'
+							+ data.formattedAddress
+							+ '</div>'
+							+ '<div class="venue-contact"><span class=""></span>'
+							+ data.formattedPhone
+							+ '</div>'
+							+ '<div class="venue-url"><span class=""></span>'
+							+ data.url
+							+ '</div>'
+							+ '</div>';
 
         return contentString;
     };
@@ -94,11 +175,21 @@ function mapViewModel() {
 
         var markerContent = getMarkerContent(data);
         marker.addListener('click', function () {
+
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function () {
+                marker.setAnimation(null)
+            },1500);
             infowindow.open(map, marker);
             infowindow.setContent(markerContent);
+            map.panTo(place);
         });
     };
     
+    
+    self.clickMarker = function (venue) {
+        console.log('click');
+    };
     // Removes the markers from the map and array
     function removeMarker() {
        // self.currentMarker.setMap(null);
@@ -129,7 +220,7 @@ function mapViewModel() {
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
         //infowindow = new google.maps.InfoWindow();
         $('#map').height($(window).height());
-        infowindow = new google.maps.InfoWindow();
+        infowindow = new google.maps.InfoWindow({ maxWidth: 170 });
     };
 
     // Map bounds get updated on page resize
