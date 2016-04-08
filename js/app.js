@@ -20,7 +20,8 @@ function mapViewModel() {
         mapOptions,
         lat,
         lng,
-        infowindow;
+        infowindow,
+        mapBounds;
 
     var defaultKeyword = "best nearby";
     var defaultNeighborhood = "New York";
@@ -54,15 +55,16 @@ function mapViewModel() {
             self.dataList().forEach(function (venueItem) {
                 displayMarker(venueItem);
             });
+
             // set bounds to FourSqure suggested bounds for each items
-       /*     var bounds = data.response.suggestedBounds;
+            var bounds = data.response.suggestedBounds;
             if (bounds != undefined) {
                 mapBounds = new google.maps.LatLngBounds(
                   new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
                   new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
                 map.fitBounds(mapBounds);
             }
-        */
+        
         }).error(function (e) {
 
             $APIError.text('Error: Data could not be load');
@@ -129,9 +131,11 @@ function mapViewModel() {
         $('#map').height($(window).height());
         infowindow = new google.maps.InfoWindow();
     };
+
+    // Map bounds get updated on page resize
     window.addEventListener('resize', function (e) {
-  
-       //////////////////
+        map.fitBounds(mapBounds);
+        $("#map").height($(window).height());
     });
 
     self.computedNeighborhood = function () {
