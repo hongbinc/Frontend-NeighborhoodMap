@@ -1,5 +1,4 @@
 ﻿/* Generic Styles */
-
 .showbox {
     position: absolute;
     z-index: 100;
@@ -83,7 +82,9 @@ body {
     display: inline;
     padding-left: 10px;
 }
-
+.tips {
+    font-weight:bold;
+}
 .PlaceDisplay::-webkit-scrollbar-thumb {
     background-color: darkgray;
     outline: 1px solid slategrey;
