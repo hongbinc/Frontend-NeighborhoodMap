@@ -139,9 +139,11 @@ function mapViewModel() {
 							+ '<a href ="' + data.foursquareURL + '">'
 							+ data.placename
 							+ '</a>'
-							+ '<span class="venue-rating badge">'
+                            + '<div class="rate_position">'
+							+ '<span class="venue-rating badge ">'
 							+ data.rating
 							+ '</span>'
+                            + '</div>'
 							+ '</div>'
 							+ '<div class="venue-category"><span class=""></span>'
 							+ data.category
