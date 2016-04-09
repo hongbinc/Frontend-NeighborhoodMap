@@ -147,16 +147,16 @@ function mapViewModel() {
 							+ '</span>'
                             + '</div>'
 							+ '</div>'
-							+ '<div class="venue-category"><span class=""></span>'
+							+ '<div class="venue-category">'
 							+ data.category
 							+ '</div>'
-							+ '<div class="venue-address"><span class=""></span>'
+							+ '<div class="venue-address">'
 							+ data.formattedAddress
 							+ '</div>'
-							+ '<div class="venue-contact"><span class=""></span>'
+							+ '<div class="venue-contact">'
 							+ data.formattedPhone
 							+ '</div>'
-							+ '<div class="venue-url"><span class=""></span>'
+							+ '<div class="venue-url">'
 							+ data.url
 							+ '</div>'
 							+ '</div>';
