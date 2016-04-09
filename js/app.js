@@ -85,6 +85,7 @@ function mapViewModel() {
     self.neighborhood = ko.observable(defaultNeighborhood); 
     self.keyword = ko.observable('');
     self.dataList = ko.observableArray([]);
+    self.formattedAddress = ko.observable('');
    // self.currentMarker = ko.observable('');
   //  self.selectedVenue = ko.observable(''); // selected venue info
     //self.selectedMarker = ko.observable(''); // selected marker info
@@ -288,6 +289,7 @@ function mapViewModel() {
 
         lat = neighborhoodPlace.geometry.location.lat();
         lng = neighborhoodPlace.geometry.location.lng();
+        self.formattedAddress(neighborhoodPlace.formatted_address);
         var neighborhoodShowOnMap = new google.maps.LatLng(lat, lng);
 
         map.setCenter(neighborhoodShowOnMap);

@@ -13,35 +13,31 @@
 <body>
     
     <div class="showbox">
-        <div class="neighborhood">
-            <input data-bind="value: neighborhood" class="">
-        </div>
-        <div class="search-bar">
-            <input data-bind="value: keyword" class="search-area" placeholder="search for popular places">
-            <button class="search-button">Search</button>
+        <div class="input-group">
+            <input data-bind="value: neighborhood" class="form-control" placeholder="Neighborhood">
+            <input data-bind="value: keyword" class="form-control" placeholder="Search for popular places">
+            <button class="btn btn-default">Search</button>
         </div>
         <div class="PlaceDisplay">
             <div >
-                <h3 id="APIError"></h3>
+                <span id="APIError"></span>
             </div>
+            <h2 data-bind="text: formattedAddress">Popular Places</h2>
+            <div class="">
+                <div data-bind="foreach: dataList ">
+                    <div data-bind="click: $root.clickMarker">
+                        <hr>
+                        <p><span class="v-name" data-bind="text: placename"></span></p>
+                        <p class="v-category"><span data-bind="text: category"></span></p>
+                        <p class="v-address"><span data-bind="text: formattedAddress"></span></p>
+                        <p class="v-contact"><span data-bind="text: formattedPhone"></span></p>
+                        <p class="v-tips"><span data-bind="text: tips"></span></p>
+                    </div>
+                </div>
+            </div> 
         </div>
     </div>
 
-    <div id="infolistBox">
-        <h2>Popular Places</h2>
-        <div class="">
-        <ul data-bind="foreach: dataList ">
-            <li data-bind="click: $root.clickMarker">
-                <hr>
-                <p><span class="v-name" data-bind="text: placename"></span></p>
-                <p class="v-category"><span data-bind="text: category"></span></p>
-                <p class="v-address"><span data-bind="text: formattedAddress"></span></p>
-                <p class="v-contact"><span data-bind="text: formattedPhone"></span></p>
-                <p class="v-tips"><span data-bind="text: tips"></span></p>
-            </li>
-        </ul>
-        </div> 
-    </div>
     <div id="map"></div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
