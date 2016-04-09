@@ -18,11 +18,12 @@ body {
 
 #infolistBox {
   max-width: 400px;
+  max-height: 500px;
+  overflow:auto;
   padding-left: 2px;
   padding-right: 2px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   border-radius: 3px;
-  z-index: 102;
+  z-index: 100;
   position: fixed;
   top: 15px;
   right: 15px;

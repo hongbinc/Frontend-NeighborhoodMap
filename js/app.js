@@ -167,8 +167,8 @@ function mapViewModel() {
         var marker = new google.maps.Marker({
             map: map,
             position: place,
-            title: data.placename
-
+            title: data.placename,
+            marker_id: data.id
         });
         // push marker to the array
         placeMarkers.push(marker);
@@ -176,10 +176,10 @@ function mapViewModel() {
         var markerContent = getMarkerContent(data);
         marker.addListener('click', function () {
 
+            for (var i in placeMarkers) {
+                placeMarkers[i].setAnimation(null); 
+            }
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function () {
-                marker.setAnimation(null)
-            },1500);
             infowindow.open(map, marker);
             infowindow.setContent(markerContent);
             map.panTo(place);
@@ -187,8 +187,25 @@ function mapViewModel() {
     };
     
     
-    self.clickMarker = function (venue) {
-        console.log('click');
+    self.clickMarker = function (data) {
+     //   console.log(data);
+     //   console.log(placeMarkers);
+        var markerContent = getMarkerContent(data);
+        var place = new google.maps.LatLng(data.lat, data.lng);
+        var currentMarker;
+        
+        for (var i in placeMarkers) {
+            placeMarkers[i].setAnimation(null);
+            if (placeMarkers[i].marker_id === data.id) {
+                placeMarkers[i].setAnimation(google.maps.Animation.BOUNCE);
+               // currentMarker = placeMarkers[i];
+                infowindow.open(map, placeMarkers[i]);
+                infowindow.setContent(markerContent);
+            }
+           
+        }
+        
+        map.panTo(place);
     };
     // Removes the markers from the map and array
     function removeMarker() {
@@ -221,6 +238,12 @@ function mapViewModel() {
         //infowindow = new google.maps.InfoWindow();
         $('#map').height($(window).height());
         infowindow = new google.maps.InfoWindow({ maxWidth: 170 });
+        // disable marker animation when infowindow is closed
+        google.maps.event.addListener(infowindow, 'closeclick', function () {
+            for (var i in placeMarkers) {
+                placeMarkers[i].setAnimation(null);
+            }
+        });
     };
 
     // Map bounds get updated on page resize
