@@ -5,6 +5,7 @@
 
 // FourSquare data model
 var venue = function (data) {
+    // define Foursquare API data variable
     this.placename = data.venue.name;
     this.id = data.venue.id;
     this.lat = data.venue.location.lat;
@@ -14,12 +15,10 @@ var venue = function (data) {
     this.formattedPhone = this.getFormattedPhone(data);
     this.formattedAddress = data.venue.location.formattedAddress;
     this.tips = this.getTips(data);
-
     this.url = this.getUrl(data);
-
     this.rating = this.getRating(data);
-
-    this.featuredPhoto = this.getFeaturedPhoto(data);
+    //Not using it right now, save for later
+    //this.featuredPhoto = this.getFeaturedPhoto(data);
 
 };
 
@@ -57,18 +56,21 @@ venue.prototype = {
         else
             return data.venue.rating;
     },
-
-    getFeaturedPhoto: function (data) {
-        if (!data.venue.featuredPhotos)
-            return this.photoPlaceHolder;
-        else {
-            this.photoSuffix = data.venue.featuredPhotos.items[0].suffix;
-            return this.photoPrefix + 'width100' + this.photoSuffix;
+    /*  // Not using it right now, save for later
+        getFeaturedPhoto: function (data) {
+            if (!data.venue.featuredPhotos)
+                return this.photoPlaceHolder;
+            else {
+                this.photoSuffix = data.venue.featuredPhotos.items[0].suffix;
+                return this.photoPrefix + 'width100' + this.photoSuffix;
+            }
         }
-    }
+    */
 }
 
-
+/*
+ * Neighborhood Map View Model.
+ */
 function mapViewModel() {
     var self = this,
         map,
@@ -82,17 +84,17 @@ function mapViewModel() {
     var defaultKeyword = "best nearby";
     var defaultNeighborhood = "New York";
     var placeMarkers = [];
-    self.neighborhood = ko.observable(defaultNeighborhood); 
-    self.keyword = ko.observable('');
-    self.dataList = ko.observableArray([]);
-    self.formattedAddress = ko.observable('');
-   // self.currentMarker = ko.observable('');
-  //  self.selectedVenue = ko.observable(''); // selected venue info
-    //self.selectedMarker = ko.observable(''); // selected marker info
+    self.neighborhood = ko.observable(defaultNeighborhood); // neighborhood location
+    self.keyword = ko.observable(''); // searched keyword
+    self.dataList = ko.observableArray([]); // most popular place Foursquare picks base on neighborhood and input keyword
+    self.formattedAddress = ko.observable(''); // city address
 
-    //self.placeList = ko.observableArray(self.dataList());
-    // Load Foursquare data
+    /**
+     * Get best nearby neighborhood venues data from foursquare API,
+     * create venues markers on map
+     */
     function LoadFourSquare() {
+        // Create Foursquare API data URL
         var $APIError = $('#APIError');
         var url_prefix = 'https://api.foursquare.com/v2/venues/explore?client_id=';
         var client_id = '1I25VINMXH4AXMWCEUDLLBDD0LIWFSBVNXRCM3USQQOBCBSW';
@@ -102,16 +104,14 @@ function mapViewModel() {
         var keyword = self.keyword();
         var search = '&query=' + keyword;
         var FourSquareURL = url_prefix + client_id + client_secret + version + location + search;
-        //console.log(keyword);
+        
         $.getJSON(FourSquareURL, function (data) {
-           
+
             var FourSquareData = data.response.groups[0].items;
 
             FourSquareData.forEach(function (data) {
-
                 self.dataList.push(new venue(data));
             });
-
             self.dataList().forEach(function (venueItem) {
                 displayMarker(venueItem);
             });
@@ -124,16 +124,18 @@ function mapViewModel() {
                   new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
                 map.fitBounds(mapBounds);
             }
-        
+
         }).error(function (e) {
 
             $APIError.text('Error: Data could not be load');
         });
     };
 
-
+    /**
+ 	 * Set place marker infowindow
+ 	 */
     function getMarkerContent(data) {
-
+        // set venue info window string
         var contentString = '<div class="venue-infowindow">'
 							+ '<div class="venue-name">'
 							+ '<a href ="' + data.foursquareURL + '">'
@@ -161,9 +163,13 @@ function mapViewModel() {
 
         return contentString;
     };
-    // create place marker
+    /**
+ 	 * Create a place marker on map.
+ 	 * When the place marker is clicked on map, 
+ 	 * open marker infowindow, set marker bounce animation
+ 	 */
     function displayMarker(data) {
-        
+
         var place = new google.maps.LatLng(data.lat, data.lng);
 
         // create a marker for selected place
@@ -177,42 +183,48 @@ function mapViewModel() {
         placeMarkers.push(marker);
 
         var markerContent = getMarkerContent(data);
+        // marker event Listener
         marker.addListener('click', function () {
-
+            // stop all other marker bounce animation 
             for (var i in placeMarkers) {
-                placeMarkers[i].setAnimation(null); 
+                placeMarkers[i].setAnimation(null);
             }
             marker.setAnimation(google.maps.Animation.BOUNCE);
+            // open infowindow if this marker is clicked
             infowindow.open(map, marker);
+            // set the content of infowindow 
             infowindow.setContent(markerContent);
+            // pan to this place's position on map when the marker is clicked
             map.panTo(place);
         });
     };
-    
-    
+
+    /**
+ 	 * When place details is clicked in place list,
+ 	 * panto the venue marker on map, display infowindow, 
+ 	 * and start marker bounce animation
+ 	 */
     self.clickMarker = function (data) {
-     //   console.log(data);
-     //   console.log(placeMarkers);
+
         var markerContent = getMarkerContent(data);
         var place = new google.maps.LatLng(data.lat, data.lng);
         var currentMarker;
-        
+
         for (var i in placeMarkers) {
+            // stop all other marker bounce animation 
             placeMarkers[i].setAnimation(null);
             if (placeMarkers[i].marker_id === data.id) {
                 placeMarkers[i].setAnimation(google.maps.Animation.BOUNCE);
-               // currentMarker = placeMarkers[i];
+                // currentMarker = placeMarkers[i];
                 infowindow.open(map, placeMarkers[i]);
                 infowindow.setContent(markerContent);
             }
-           
         }
-        
         map.panTo(place);
     };
     // Removes the markers from the map and array
     function removeMarker() {
-       // self.currentMarker.setMap(null);
+        // self.currentMarker.setMap(null);
 
         placeMarkers.forEach(function (place) {
             place.setMap(null);
@@ -221,24 +233,20 @@ function mapViewModel() {
         placeMarkers = [];
     }
 
-
-
     // initializing the Google Map
     function initializeMap() {
 
         mapOptions = {
             zoom: 15,
-            disableDefaultUI: true,
-           // center: { lat: -42.40, lng: 73.45 },
+            disableDefaultUI: true
         };
 
         if (typeof google == 'undefined') {
-            $('#googleMap-API-error').html('<h2>There are errors when retrieving map data.</h2><h2>Please try refresh page later.</h2>');
+            $('#googleMap-API-error').html('<h2>There are Errors when retrieving map data.');
             return;
         }
- 
+
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        //infowindow = new google.maps.InfoWindow();
         $('#map').height($(window).height());
         infowindow = new google.maps.InfoWindow({ maxWidth: 170 });
         // disable marker animation when infowindow is closed
@@ -261,27 +269,35 @@ function mapViewModel() {
             removeMarker();
             self.dataList([]);
             getNeighborhood(self.neighborhood());
-           // removeMarker();
-           // self.dataList([]);
         }
-       // console.log(self.keyword());
     };
+
+   /* when user update neighborhood address or keyword in input bar,
+    * update displays for the map
+    */
     self.neighborhood.subscribe(self.computedNeighborhood);
     self.keyword.subscribe(self.computedNeighborhood);
+
     // request neighborhood location data from PlaceService
     function getNeighborhood(neighborhood) {
-    
+
+        // the search request object
         var request = {
             query: neighborhood
         };
 
+        // creates a Google place search service object. 
+        // PlacesService does the work of searching for location data.
         service = new google.maps.places.PlacesService(map);
+        // searches the Google Maps API for location data and runs the callback 
+        // function with the search results after each search.
         service.textSearch(request, neighborhoodCallback);
     };
 
     // Checks that the PlacesServiceStatus is OK, and pass the place data
     function neighborhoodCallback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            // results[0] contain lat and lng info
             mapCenter(results[0]);
         }
     };
@@ -299,12 +315,15 @@ function mapViewModel() {
         // Load FourSquare data
         LoadFourSquare();
     };
-    
+
     function initNeighborhood(neighborhood) {
         getNeighborhood(neighborhood);
     };
-   
+
+    // initialize map
     initializeMap();
+
+    // initialize neighborhood with default neighborhood
     initNeighborhood(defaultNeighborhood);
 
 };
@@ -317,5 +336,5 @@ $(function () {
 });
 // Click to hide and show place list
 function toggle(id) {
-    $('.' + id ).toggle();  
+    $('.' + id).toggle();
 };
