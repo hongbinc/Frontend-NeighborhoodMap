@@ -299,11 +299,11 @@ function mapViewModel() {
         // Load FourSquare data
         LoadFourSquare();
     };
-
+    
     function initNeighborhood(neighborhood) {
         getNeighborhood(neighborhood);
     };
-    
+   
     initializeMap();
     initNeighborhood(defaultNeighborhood);
 
@@ -315,3 +315,7 @@ $(function () {
     ko.applyBindings(new mapViewModel());
 
 });
+// Click to hide and show place list
+function toggle(id) {
+    $('.' + id ).toggle();  
+};

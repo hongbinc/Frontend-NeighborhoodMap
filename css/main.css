@@ -9,7 +9,6 @@
 
 body {
   margin: 0px;
-  font-family: 'Roboto', sans-serif;
 }
 
 #map {
@@ -17,7 +16,7 @@ body {
   height: 100%;
 }
 .form-control {
-    width:180px !important;
+    width:162px !important;
     margin-right:3px;
 }
 .PlaceDisplay {
@@ -35,11 +34,22 @@ body {
     padding-right:10px;
     font-family:Cambria;
     font-size:15px;
+    padding-bottom:10px;
+    padding-top:10px;
+    border-bottom:solid 1px;
+    border-bottom-color:#eae7e1;
+}
+.singleplace:hover {
+    background-color:#ffd27e;
+    cursor: pointer;    
 }
 .city {
     font-family: Cambria;
     font-weight: bold;
     text-align: center;
+    border-bottom:solid 1px;
+    border-bottom-color:#686161;
+    padding-bottom:10px;
 }
 .venue_name{
     font-family:Georgia;
@@ -73,4 +83,33 @@ body {
 .PlaceDisplay::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
- 
+
+@media only screen and (min-width:1280px) {
+    .listhide {
+        display:none;
+    }
+}
+
+/* iPhone 6 and iPhone 6 plus */
+@media screen and (min-width:339px) and (max-width:416px) {
+    
+    .button-control {
+        width: 79px !important;
+        margin-right: 3px;
+        margin-top: 3px;
+    }
+    .form-control {
+        margin-bottom:3px !important;
+    }
+} 
+
+@media only screen and (min-width:252px) {
+    .button-control {
+        width: 79px !important;
+        margin-right: 3px;
+        margin-bottom:3px;
+    }
+    .form-control {
+        margin-bottom:3px !important;
+    }
+}

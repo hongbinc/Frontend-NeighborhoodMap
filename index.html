@@ -15,44 +15,47 @@
     <div class="showbox">
         <div class="input-group">
             <input data-bind="value: neighborhood" class="form-control" placeholder="Neighborhood">
-            <input data-bind="value: keyword" class="form-control" placeholder="Search for popular places">
-            <button class="btn btn-default">Search</button>
+            <input data-bind="value: keyword" class="form-control" placeholder="Popular places">
+            <button class="btn btn-default button-control">Search</button>
+            <button class="btn btn-default button-control listhide" onclick="toggle('PlaceDisplay')">Hide List</button>
         </div>
         <div class="PlaceDisplay">
             <div >
                 <span id="APIError"></span>
             </div>
-            <h2 data-bind="text: formattedAddress" class="city"></h2>
-            <div>
-                <div data-bind="foreach: dataList ">
-                    <div data-bind="click: $root.clickMarker">
-                        <hr>
-                        <div class="placedetail">
-                            <div>
-                                <span class="venue_name" data-bind="text: placename"></span>
-                                <span>--</span>
-                                <span data-bind="text: category" class="venue_category"></span>
-                            </div>
-                            <div class="venue_rating">
-                                <img src="images/Foursquare-icon.png" />
-                                <div class="rate_position">
-                                    <span data-bind="text: rating" class="badge ratesize"></span>
+            <div class ="city">
+                <h2 data-bind="text: formattedAddress"></h2>
+            </div>
+                <div data-bind="foreach: dataList">
+                    <div class="singleplace">
+                        <div data-bind="click: $root.clickMarker">
+                                                  
+                            <div class="placedetail">
+                                <div>
+                                    <span class="venue_name" data-bind="text: placename"></span>
+                                    <span>--</span>
+                                    <span data-bind="text: category" class="venue_category"></span>
                                 </div>
+                                <div class="venue_rating">
+                                    <img src="images/Foursquare-icon.png" />
+                                    <div class="rate_position">
+                                        <span data-bind="text: rating" class="badge ratesize"></span>
+                                    </div>
+                                </div>
+                                <div class="venue_address">
+                                    <span data-bind="text: formattedAddress"></span>
+                                </div>
+                                <div class="venue_contact">
+                                    <span data-bind="text: formattedPhone"></span>
+                                </div>
+                                <div class="venue_tips">
+                                    <span data-bind="text: tips"></span>
+                                </div>
+
                             </div>
-                            <div class="venue_address">
-                                <span data-bind="text: formattedAddress"></span>
-                            </div>
-                            <div class="venue_contact">
-                                <span data-bind="text: formattedPhone"></span>
-                            </div>
-                            <div class="venue_tips">
-                                <span data-bind="text: tips"></span>
-                            </div>
-                            
                         </div>
                     </div>
                 </div>
-            </div> 
         </div>
     </div>
 
