@@ -329,11 +329,18 @@ function mapViewModel() {
 };
 
 // initialize mapViewModel 
-$(function () {
+function InitMapViewModel() {
+    if (typeof google !== 'undefined') {
+        ko.applyBindings(new mapViewModel());
+    }
+    else {
+        googleError();
+    }
+};
 
-    ko.applyBindings(new mapViewModel());
-
-});
+function googleError() {
+    alert('Google Maps can not be load, Please refresh the page.');
+};
 // Click to hide and show place list
 function toggle(id) {
     $('.' + id).toggle();

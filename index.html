@@ -58,10 +58,11 @@
 
     <div id="map"></div>
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places" ></script>
+    <script src="js/app.js" async></script>
+    <script async type="text/javascript" onerror="googleError()" src="http://maps.googleapis.com/maps/api/js?libraries=places&callback=InitMapViewModel"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
     <script src="js/bootstrap.min.js" async></script>
-    <script src="js/knockout-3.4.0.js" async></script>
-    <script src="js/app.js" async></script>
+    <script src="js/knockout-3.4.0.js" async ></script>
+    
 </body>
 </html>
