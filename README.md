@@ -19,7 +19,7 @@ Developed single page application featuring a map of neighborhood with Knockout.
 	<li>
 		For mobile device:
 		<ul>
-			<li>Clieck <code>Show List</code> button to display popular places list</li>
+			<li>Click  <code>Show List</code> button to Show/Hide popular places list</li>
 		</ul>
 	</li>
 </ul>
