@@ -10,6 +10,7 @@ Developed single page application featuring a map of neighborhood with Knockout.
 - Allowed user define a neighborhood and search popular places by keyword
 - Build a search bar to filter the places displayed on map
 - By default, this APP will display 30 popular Restaurants in New York 
+
 ## How to use:
 <ul>
   	<li>Input a neighborhood on <code>Neighborhood</code> input box</li>
@@ -22,6 +23,7 @@ Developed single page application featuring a map of neighborhood with Knockout.
 		</ul>
 	</li>
 </ul>
+
 ## References:
 <ul>
   	<li><a href="http://knockoutjs.com/documentation/introduction.html">Knockout Documentation</a></li>
