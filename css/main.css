@@ -105,7 +105,9 @@ body {
 }
 /*  Medium Devices */
 @media screen and (min-width:420px) and (max-width:1200px) {
-
+    .PlaceDisplay {
+        display:none;
+    }
     .button-control {
         width: 79px !important;
         margin-right: 3px;
@@ -117,7 +119,9 @@ body {
 }
 /* iPhone 6 and iPhone 6 plus */
 @media screen and (min-width:339px) and (max-width:416px) {
-
+    .PlaceDisplay {
+        display:none;
+    }
     .button-control {
         width: 79px !important;
         margin-right: 3px;
@@ -131,12 +135,14 @@ body {
 
 /* Extra small devices  */
 @media only screen and (min-width:252px) and (max-width:339px){
+    .PlaceDisplay {
+        display:none;
+    }
     .button-control {
         width: 79px !important;
         margin-right: 3px;
         margin-bottom: 3px;
     }
-
     .form-control {
         margin-bottom: 3px !important;
     }

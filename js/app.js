@@ -81,12 +81,14 @@ function mapViewModel() {
         infowindow,
         mapBounds;
 
-    var defaultKeyword = "best nearby";
     var defaultNeighborhood = "New York";
+    var defaultKeyword = "Restaurant";
     var placeMarkers = [];
     self.neighborhood = ko.observable(defaultNeighborhood); // neighborhood location
-    self.keyword = ko.observable(''); // searched keyword
+    self.keyword = ko.observable(defaultKeyword); // searched keyword
+    self.filterword = ko.observable(''); // Filter by this word
     self.dataList = ko.observableArray([]); // most popular place Foursquare picks base on neighborhood and input keyword
+    self.filterList = ko.observableArray(self.dataList());
     self.formattedAddress = ko.observable(''); // city address
 
     /**
@@ -112,10 +114,11 @@ function mapViewModel() {
             FourSquareData.forEach(function (data) {
                 self.dataList.push(new venue(data));
             });
+            self.filterList(self.dataList());
             self.dataList().forEach(function (venueItem) {
                 displayMarker(venueItem);
             });
-
+            
             // set bounds to FourSqure suggested bounds for each items
             var bounds = data.response.suggestedBounds;
             if (bounds != undefined) {
@@ -124,7 +127,6 @@ function mapViewModel() {
                   new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
                 map.fitBounds(mapBounds);
             }
-
         }).error(function (e) {
 
             $APIError.text('Error: Data could not be load');
@@ -208,7 +210,7 @@ function mapViewModel() {
 
         var markerContent = getMarkerContent(data);
         var place = new google.maps.LatLng(data.lat, data.lng);
-        var currentMarker;
+      //  var currentMarker;
 
         for (var i in placeMarkers) {
             // stop all other marker bounce animation 
@@ -224,8 +226,7 @@ function mapViewModel() {
     };
     // Removes the markers from the map and array
     function removeMarker() {
-        // self.currentMarker.setMap(null);
-
+        
         placeMarkers.forEach(function (place) {
             place.setMap(null);
 
@@ -259,7 +260,7 @@ function mapViewModel() {
 
     // Map bounds get updated on page resize
     window.addEventListener('resize', function (e) {
-        map.fitBounds(mapBounds);
+      //  map.fitBounds(mapBounds);
         $("#map").height($(window).height());
     });
 
@@ -269,14 +270,36 @@ function mapViewModel() {
             removeMarker();
             self.dataList([]);
             getNeighborhood(self.neighborhood());
+            self.filterword('');
         }
     };
 
+    // Filter the displayed Place list and marker on page by filterword
+    self.computedFilterList = function () {
+        // create new list to store filtered data
+        var list = [];
+        var filterword = self.filterword().toLowerCase();
+        // filter process
+        for (var i in self.dataList()) {
+            if (self.dataList()[i].placename.toLowerCase().indexOf(filterword) != -1 ||
+                self.dataList()[i].category.toLowerCase().indexOf(filterword) != -1) {
+                list.push(self.dataList()[i]);
+            }
+        }
+        // remove all marker displayed on map
+        removeMarker();
+        self.filterList(list);
+        // display filterList markers on map
+        self.filterList().forEach(function (venueItem) {
+            displayMarker(venueItem);
+        });
+    }
    /* when user update neighborhood address or keyword in input bar,
     * update displays for the map
     */
     self.neighborhood.subscribe(self.computedNeighborhood);
     self.keyword.subscribe(self.computedNeighborhood);
+    self.filterword.subscribe(self.computedFilterList);
 
     // request neighborhood location data from PlaceService
     function getNeighborhood(neighborhood) {
