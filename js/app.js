@@ -66,7 +66,7 @@ venue.prototype = {
             }
         }
     */
-}
+};
 
 /*
  * Neighborhood Map View Model.
@@ -121,7 +121,7 @@ function mapViewModel() {
             
             // set bounds to FourSqure suggested bounds for each items
             var bounds = data.response.suggestedBounds;
-            if (bounds != undefined) {
+            if (bounds !== undefined) {
                 mapBounds = new google.maps.LatLngBounds(
                   new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
                   new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng));
@@ -131,7 +131,7 @@ function mapViewModel() {
 
             $APIError.text('Error: Data could not be load');
         });
-    };
+    }
 
     /**
  	 * Set place marker infowindow
@@ -164,7 +164,7 @@ function mapViewModel() {
 							+ '</div>';
 
         return contentString;
-    };
+    }
     /**
  	 * Create a place marker on map.
  	 * When the place marker is clicked on map, 
@@ -199,7 +199,7 @@ function mapViewModel() {
             // pan to this place's position on map when the marker is clicked
             map.panTo(place);
         });
-    };
+    }
 
     /**
  	 * When place details is clicked in place list,
@@ -256,7 +256,7 @@ function mapViewModel() {
                 placeMarkers[i].setAnimation(null);
             }
         });
-    };
+    }
 
     // Map bounds get updated on page resize
     window.addEventListener('resize', function (e) {
@@ -266,7 +266,7 @@ function mapViewModel() {
 
     self.computedNeighborhood = function () {
 
-        if (self.neighborhood() != '') {
+        if (self.neighborhood() !== '') {
             removeMarker();
             self.dataList([]);
             getNeighborhood(self.neighborhood());
@@ -293,7 +293,7 @@ function mapViewModel() {
         self.filterList().forEach(function (venueItem) {
             displayMarker(venueItem);
         });
-    }
+    };
    /* when user update neighborhood address or keyword in input bar,
     * update displays for the map
     */
@@ -315,7 +315,7 @@ function mapViewModel() {
         // searches the Google Maps API for location data and runs the callback 
         // function with the search results after each search.
         service.textSearch(request, neighborhoodCallback);
-    };
+    }
 
     // Checks that the PlacesServiceStatus is OK, and pass the place data
     function neighborhoodCallback(results, status) {
@@ -323,7 +323,7 @@ function mapViewModel() {
             // results[0] contain lat and lng info
             mapCenter(results[0]);
         }
-    };
+    }
 
     // Get neighborhood's real lat and lng, set up map center 
     function mapCenter(neighborhoodPlace) {
@@ -337,11 +337,11 @@ function mapViewModel() {
 
         // Load FourSquare data
         LoadFourSquare();
-    };
+    }
 
     function initNeighborhood(neighborhood) {
         getNeighborhood(neighborhood);
-    };
+    }
 
     // initialize map
     initializeMap();
@@ -349,7 +349,7 @@ function mapViewModel() {
     // initialize neighborhood with default neighborhood
     initNeighborhood(defaultNeighborhood);
 
-};
+}
 
 // initialize mapViewModel 
 function InitMapViewModel() {
@@ -359,12 +359,12 @@ function InitMapViewModel() {
     else {
         googleError();
     }
-};
+}
 
 function googleError() {
     alert('Google Maps can not be load, Please refresh the page.');
-};
+}
 // Click to hide and show place list
 function toggle(id) {
     $('.' + id).toggle();
-};
+}
