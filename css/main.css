@@ -50,7 +50,9 @@ body {
     border-bottom: solid 1px;
     border-bottom-color: #eae7e1;
 }
-
+.error {
+    color:#eae7e1;
+}
 .singleplace:hover {
     background-color: #ffd27e;
     cursor: pointer;
