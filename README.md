@@ -1,4 +1,4 @@
-# Neighborhood Map Project -- [Live Demo](http://hongbinc.github.io/Frontend-NeighborhoodMap/)##
+# Neighborhood Map Project -- [Live Demo](https://hongbinc.github.io/Frontend-NeighborhoodMap/)##
 ![](http://progressed.io/bar/100?title=Progress)
 
 ## Project Overview:
